@@ -29,7 +29,9 @@ public class AlumnoServiceImpl implements AlumnoService {
 
     @Override
     public Alumno create(Alumno alumno) {
-        alumno.setId(null);
+        if (alumno.getId() != null && alumnoRepository.existsById(alumno.getId())) {
+            throw new IllegalArgumentException("Alumno with id " + alumno.getId() + " already exists");
+        }
 
         validateNamesWithoutNumbers(alumno.getNombres(), "nombres");
         validateNamesWithoutNumbers(alumno.getApellidos(), "apellidos");

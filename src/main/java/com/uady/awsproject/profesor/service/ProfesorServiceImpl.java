@@ -29,7 +29,9 @@ public class ProfesorServiceImpl implements ProfesorService {
 
     @Override
     public Profesor create(Profesor profesor) {
-        profesor.setId(null);
+        if (profesor.getId() != null && profesorRepository.existsById(profesor.getId())) {
+            throw new IllegalArgumentException("Profesor with id " + profesor.getId() + " already exists");
+        }
 
         validateNamesWithoutNumbers(profesor.getNombres(), "nombres");
         validateNamesWithoutNumbers(profesor.getApellidos(), "apellidos");
