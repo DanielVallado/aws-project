@@ -2,12 +2,15 @@ package com.uady.awsproject.alumno.repository;
 
 import com.uady.awsproject.alumno.model.Alumno;
 import com.uady.awsproject.common.util.IdGenerator;
-import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Repository
+/**
+ * In-memory implementation of AlumnoRepository.
+ * This class is kept for reference and testing purposes.
+ * The DatabaseAlumnoRepository is now the primary implementation.
+ */
 public class InMemoryAlumnoRepository implements AlumnoRepository {
 
     private final Map<Long, Alumno> storage = new ConcurrentHashMap<>();
@@ -45,6 +48,11 @@ public class InMemoryAlumnoRepository implements AlumnoRepository {
     public boolean existsByMatricula(String matricula) {
         return storage.values().stream()
                 .anyMatch(alumno -> alumno.getMatricula().equals(matricula));
+    }
+
+    @Override
+    public void flush() {
+        // No operation needed for in-memory implementation
     }
 
 }

@@ -36,3 +36,8 @@ build/
 .mvn/wrapper/maven-wrapper.jar
 .mvn/wrapper/maven-wrapper.properties
 
+### Environment Variables ###
+.env
+.env.local
+.env.*.local
+

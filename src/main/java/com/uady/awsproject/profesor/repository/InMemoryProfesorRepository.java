@@ -2,12 +2,15 @@ package com.uady.awsproject.profesor.repository;
 
 import com.uady.awsproject.profesor.model.Profesor;
 import com.uady.awsproject.common.util.IdGenerator;
-import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Repository
+/**
+ * In-memory implementation of ProfesorRepository.
+ * This class is kept for reference and testing purposes.
+ * The DatabaseProfesorRepository is now the primary implementation.
+ */
 public class InMemoryProfesorRepository implements ProfesorRepository {
 
     private final Map<Long, Profesor> storage = new ConcurrentHashMap<>();
@@ -45,6 +48,11 @@ public class InMemoryProfesorRepository implements ProfesorRepository {
     public boolean existsByNumeroEmpleado(String numeroEmpleado) {
         return storage.values().stream()
                 .anyMatch(profesor -> profesor.getNumeroEmpleado().equals(numeroEmpleado));
+    }
+
+    @Override
+    public void flush() {
+        // No operation needed for in-memory implementation
     }
 }
 

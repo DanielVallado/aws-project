@@ -12,5 +12,6 @@ public interface ProfesorRepository {
     void deleteById(Long id);
     boolean existsById(Long id);
     boolean existsByNumeroEmpleado(String numeroEmpleado);
+    void flush();
 }
 

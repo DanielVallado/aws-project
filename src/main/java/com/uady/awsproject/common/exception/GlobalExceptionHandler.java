@@ -1,6 +1,8 @@
 package com.uady.awsproject.common.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -15,6 +17,8 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiError> handleNotFoundException(
@@ -108,6 +112,8 @@ public class GlobalExceptionHandler {
             IllegalArgumentException ex,
             HttpServletRequest request) {
 
+        log.error("IllegalArgumentException at {}: {}", request.getRequestURI(), ex.getMessage());
+
         ApiError error = ApiError.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
                 .message(ex.getMessage())
@@ -118,10 +124,29 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ApiError> handleRuntimeException(
+            RuntimeException ex,
+            HttpServletRequest request) {
+
+        log.error("RuntimeException at {}: {}", request.getRequestURI(), ex.getMessage(), ex);
+
+        ApiError error = ApiError.builder()
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .message("Runtime error: " + ex.getMessage())
+                .path(request.getRequestURI())
+                .timestamp(Instant.now())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGenericException(
             Exception ex,
             HttpServletRequest request) {
+
+        log.error("Unhandled exception at {}: {}", request.getRequestURI(), ex.getMessage(), ex);
 
         ApiError error = ApiError.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())

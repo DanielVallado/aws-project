@@ -29,9 +29,7 @@ public class ProfesorServiceImpl implements ProfesorService {
 
     @Override
     public Profesor create(Profesor profesor) {
-        if (profesor.getId() != null && profesorRepository.existsById(profesor.getId())) {
-            throw new IllegalArgumentException("Profesor with id " + profesor.getId() + " already exists");
-        }
+        profesor.setId(null);
 
         validateNamesWithoutNumbers(profesor.getNombres(), "nombres");
         validateNamesWithoutNumbers(profesor.getApellidos(), "apellidos");
@@ -77,5 +75,5 @@ public class ProfesorServiceImpl implements ProfesorService {
             throw new IllegalArgumentException(fieldName + " cannot contain numbers");
         }
     }
-}
 
+}

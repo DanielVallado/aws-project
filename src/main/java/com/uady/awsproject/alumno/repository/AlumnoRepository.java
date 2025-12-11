@@ -12,5 +12,6 @@ public interface AlumnoRepository {
     void deleteById(Long id);
     boolean existsById(Long id);
     boolean existsByMatricula(String matricula);
+    void flush();
 }
 
